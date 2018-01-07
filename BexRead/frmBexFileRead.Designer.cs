@@ -190,7 +190,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 731);
+            this.ClientSize = new System.Drawing.Size(851, 796);
             this.Controls.Add(this.lblObject);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.linkLabel1);
