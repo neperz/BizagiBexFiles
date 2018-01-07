@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-16"?>
+<PackageContentInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CatalogGuids>
+    <CatalogObject>5a117f49-04a1-4b85-b557-5b83ea047157</CatalogObject>
+    <CatalogObject>8da78b14-09ec-459f-99a6-b65489ef8e50</CatalogObject>
+    <CatalogObject>452977a5-9a37-4787-bebd-4562ef438fe2</CatalogObject>
+    <CatalogObject>f9cf60e1-2eba-4522-b7b9-6bf1c47d7c1c</CatalogObject>
+  </CatalogGuids>
+  <BizAgiBizAgiversion>11.1.0.2199</BizAgiBizAgiversion>
+  <Time>2018-01-06T22:26:32.0495501-02:00</Time>
+</PackageContentInformation>

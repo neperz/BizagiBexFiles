@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="BADPLYCONFIG">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="idBaDplyConfig" type="xs:int" />
+                <xs:element name="baDplyConfigFile" type="xs:base64Binary" minOccurs="0" />
+                <xs:element name="guidBADplyConfig" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:string" minOccurs="0" />
+                <xs:element name="dplyBADplyConfig" type="xs:unsignedByte" minOccurs="0" />
+                <xs:element name="dcFileVersion" type="xs:unsignedByte" minOccurs="0" />
+                <xs:element name="dcMapType" type="xs:unsignedByte" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+      <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//BADPLYCONFIG" />
+        <xs:field xpath="idBaDplyConfig" />
+      </xs:unique>
+    </xs:element>
+  </xs:schema>
+  <BADPLYCONFIG>
+    <idBaDplyConfig>10000</idBaDplyConfig>
+    <baDplyConfigFile>UEsDBBQAAAAIACWDdkvD6nkBKgIAAKMLAAABAAAAMO1W227aQBD9lSrvjgFzCdGyErGjCBUIxRhE1ZfFnjjb4PVq1yahX9/FUPAtIUVt6UNekHfOnJkz6zkW6JatqAgDYNGAcDNkD9S3SERsiD69BEsmOxePUcSvdT2CgMeCXobC118nXb5I7wKnqo5E+B3cCCPq4SrS1W8RHJIA8M1oYCO9HEN+rIjgugvXMDytWWlfafVaq6G1Da+uNRpto9k0vBbUK0hPUpEpgEQ0ZHfvJ2YoJUpw9q7SE1nAl+F6suaA60hPnVBAuMM9VZf5PaYK+QKkxA9kKQHp5aCqW+ydNCqRpOc0HY5pfYkW9bzVpMgr6oH4Fc2c0eZFLogEG8QKBJ70vvYcNVM2us9KvbpMKDPERllugO0FSjMWQp1SqndXUwbtm/ZDnzIsyaHnNrJPGBEpn0PhYXM8H00uq9fDmdX6vBjXYT54GjMxHF411tXnTudQYU/ZF+nG0aNqS91kK5LLqR3yS9AD0wtC5kgQRaE5qEg5QXqRWyx7ZJg30lCX8+UuMINFdi1KsRxjSkUUk6VFhdrYUKx363IkCd1zEAkqN2Wpm1vI12BU/KZkviR6eqFybqml3FI7yS1mzx7efrjlwy1ZR7hUMjiLW3ad/4ZbjJRbjNPc0tfs8VSzZppVqX6zv/StmXr4L+0TS3FDfxCfvt9Fa+du4vD5/WAKjjmvUubV2FP3H7moRO/vm+n4BOcw025r7JG22ZUzeCor4I9Y641/1PgnUEsBAi0AFAAAAAgAJYN2S8PqeQEqAgAAowsAAAEAAAAAAAAAAAAAAAAAAAAAADBQSwUGAAAAAAEAAQAvAAAASQIAAAAA</baDplyConfigFile>
+    <guidBADplyConfig>30c18169-18c8-4da5-986b-cc011bbc71d2</guidBADplyConfig>
+    <dplyBADplyConfig>0</dplyBADplyConfig>
+    <dcFileVersion>3</dcFileVersion>
+    <dcMapType>1</dcMapType>
+  </BADPLYCONFIG>
+</NewDataSet>

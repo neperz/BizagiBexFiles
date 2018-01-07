@@ -24,12 +24,28 @@ namespace BexFileRead
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var array = UnzipFileToDirectory(txtBexFile.Text, txtOut.Text);
-            propertyGrid1.SelectedObject = array;
-            comboBox1.Items.Clear();
-            foreach (var i in array)
+            OpenFileDialog theDialog = new OpenFileDialog();
+            theDialog.Title = "Open Bex File";
+            theDialog.Filter = "BEX files|*.bex";
+            //theDialog.InitialDirectory = @"C:\";
+            if (theDialog.ShowDialog() == DialogResult.OK)
             {
-                comboBox1.Items.Add(new ComboIten { Name = i.Name, Value = i.Path });
+                
+                if (File.Exists(theDialog.FileName))
+                {
+                    var outdir = Path.GetTempPath() + "\\LeitorDeBex\\";
+                    var array = UnzipFileToDirectory(theDialog.FileName, outdir);
+                    propertyGrid1.SelectedObject = array;
+                    comboBox1.Items.Clear();
+                    foreach (var i in array)
+                    {
+                        comboBox1.Items.Add(new ComboIten { Name = i.Name, Value = i.Path });
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Cadê o arquivo??");
+                }
             }
 
          //   var sBackup = ReadBackupFromFile(txtBexFile.Text);
@@ -65,19 +81,23 @@ namespace BexFileRead
         {
             listView1.Columns.Clear();
             listView1.Items.Clear();
+            ColumnHeader chID = new ColumnHeader();
+            chID.Text = "ID";
+            listView1.Columns.Add(chID);
             ColumnHeader ch = new ColumnHeader();
             ch.Text = "Type";
             listView1.Columns.Add(ch);
             ColumnHeader che = new ColumnHeader();
             che.Text = "Content";
             listView1.Columns.Add(che);
-
             foreach (var cont in lista)
             {
-                if (cont.Type != "EntityValue") continue;
+                if (!checkBox1.Checked)
+                    if (cont.Type != "EntityValue") continue;
                 ListViewItem item1 = new ListViewItem();
-                item1.Text = (cont.Type);
-                var ultPart = cont.Content.Split(':').Last();
+                item1.Text = (cont.Id);
+                item1.SubItems.Add(cont.Type);
+                var ultPart = cont.Content.Split(':').Last().Replace("}}", "");
                 item1.SubItems.Add(ultPart);
                 item1.Tag = cont;
                 listView1.Items.Add(item1);
@@ -98,25 +118,7 @@ namespace BexFileRead
                 this.DataCatalog = resultingMessage;
                 propertyGrid1.SelectedObjects = resultingMessage.CatalogObject.ToArray();
 
-                listView1.Columns.Clear();
-                listView1.Items.Clear();
-                ColumnHeader ch = new ColumnHeader();
-                ch.Text ="Type";
-                listView1.Columns.Add(ch);
-                ColumnHeader che = new ColumnHeader();
-                che.Text = "Content";
-                listView1.Columns.Add(che);
-                foreach (var cont in resultingMessage.CatalogObject)
-                {
-                    if (cont.Type != "EntityValue") continue;
-                    ListViewItem item1 = new ListViewItem();
-                    item1.Text = (cont.Type);
-                    var ultPart = cont.Content.Split(':').Last();
-                    item1.SubItems.Add(ultPart);
-                    item1.Tag = cont;                    
-                    listView1.Items.Add( item1 );                    
-                }
-                listView1.Refresh();
+                Filter(resultingMessage.CatalogObject);
 
 
             }
@@ -170,6 +172,9 @@ namespace BexFileRead
             var sel = comboBox1.SelectedItem;
             var name = (ComboIten)sel;
             loadXml(name.Name, name.Value);
+            linkLabel1.Links.Clear();
+            linkLabel1.Text = name.Name;
+            linkLabel1.Links.Add(0, name.Name.Length, name.Value);
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -201,6 +206,14 @@ namespace BexFileRead
         private void button4_Click(object sender, EventArgs e)
         {
             FilterDisableds();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LinkLabel lnk = new LinkLabel();
+            lnk = (LinkLabel)sender;
+            lnk.Links[lnk.Links.IndexOf(e.Link)].Visited = true;
+            System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
         }
     }
 
