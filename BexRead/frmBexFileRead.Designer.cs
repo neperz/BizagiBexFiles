@@ -41,6 +41,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.lblObject = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -176,11 +177,21 @@
             this.checkBox1.Text = "All Type";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // lblObject
+            // 
+            this.lblObject.AutoSize = true;
+            this.lblObject.Location = new System.Drawing.Point(279, 9);
+            this.lblObject.Name = "lblObject";
+            this.lblObject.Size = new System.Drawing.Size(38, 13);
+            this.lblObject.TabIndex = 17;
+            this.lblObject.Text = "Object";
+            // 
             // frmBexFileRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(856, 731);
+            this.Controls.Add(this.lblObject);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
@@ -217,6 +228,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label lblObject;
     }
 }
 

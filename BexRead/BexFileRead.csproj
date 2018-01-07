@@ -49,7 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BizagiInfo.cs" />
+    <Compile Include="BzOptions.cs" />
+    <Compile Include="CatalogIndexes.cs" />
+    <Compile Include="CatalogIndexObjects.cs" />
     <Compile Include="CatalogObjects.cs" />
+    <Compile Include="CatalogReferences.cs" />
     <Compile Include="CDictionary.cs" />
     <Compile Include="ComboIten.cs" />
     <Compile Include="Compression.cs" />
@@ -59,8 +64,10 @@
     <Compile Include="frmBexFileRead.Designer.cs">
       <DependentUpon>frmBexFileRead.cs</DependentUpon>
     </Compile>
+    <Compile Include="PackageInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relational.cs" />
     <Compile Include="StringDictionaryByName.cs" />
     <EmbeddedResource Include="frmBexFileRead.resx">
       <DependentUpon>frmBexFileRead.cs</DependentUpon>

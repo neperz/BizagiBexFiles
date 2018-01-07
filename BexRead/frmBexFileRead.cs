@@ -16,6 +16,7 @@ namespace BexFileRead
     public partial class frmBexFileRead : Form
     {
         public ArrayOfCatalogObject DataCatalog { get; private set; }
+        public ArrayOfIndexValue DataCatalogIndex { get; private set; }
 
         public frmBexFileRead()
         {
@@ -35,6 +36,7 @@ namespace BexFileRead
                 {
                     var outdir = Path.GetTempPath() + "\\LeitorDeBex\\";
                     var array = UnzipFileToDirectory(theDialog.FileName, outdir);
+                    LoadXmls(array);
                     propertyGrid1.SelectedObject = array;
                     comboBox1.Items.Clear();
                     foreach (var i in array)
@@ -52,7 +54,17 @@ namespace BexFileRead
             //propertyGrid1.SelectedObject = sBackup;
 
         }
-      
+
+        private void LoadXmls(CNamePathPair[] array)
+        {
+            var lista = array.ToList();
+            var Catalog__Objects = lista.Where(d => d.Name == "Catalog__Objects.xml").FirstOrDefault();
+            var Catalog__Indexes = lista.Where(d => d.Name == "Catalog__Indexes.xml").FirstOrDefault();
+            loadXml(Catalog__Indexes.Name, Catalog__Indexes.Path);
+            loadXml(Catalog__Objects.Name, Catalog__Objects.Path);
+            //  throw new NotImplementedException();
+        }
+
         public void FilterByGuid(string guid)
         {
             List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Id == guid).ToList();
@@ -119,7 +131,15 @@ namespace BexFileRead
                 propertyGrid1.SelectedObjects = resultingMessage.CatalogObject.ToArray();
 
                 Filter(resultingMessage.CatalogObject);
-
+            }
+            if (name== "Catalog__Indexes.xml")
+            {
+                var xmlCO = File.ReadAllText(path);
+                ArrayOfIndexValue cIndex = new ArrayOfIndexValue();
+                XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfIndexValue));
+                StringReader rdr = new StringReader(xmlCO);
+                cIndex = (ArrayOfIndexValue)serializer.Deserialize(rdr);
+                this.DataCatalogIndex = cIndex;
 
             }
         }
@@ -184,6 +204,9 @@ namespace BexFileRead
                 var selectedOb = (CatalogObject)listView1.SelectedItems[0].Tag;
                 propertyGrid1.SelectedObject = selectedOb;
                 txtContent.Text = selectedOb.Content;
+                string ObjectName = GetObjectName(selectedOb.Content);
+                lblObject.Text = ObjectName;
+
             }
             catch (Exception)
             {
@@ -191,6 +214,24 @@ namespace BexFileRead
               //  throw;
             }
 
+        }
+
+        private string GetObjectName(string content)
+        {
+            var name = "";
+            if (content.Contains("finalEntity"))
+            {
+                var parentIdAr = content.Split(':');
+                var xname = parentIdAr[2].Replace("\"","").Replace("\",\"disable\"","").Replace(",disable","");
+                if (this.DataCatalogIndex!=null)
+                {
+                    var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == xname).FirstOrDefault();
+                    if (obj != null)
+                        name = obj.Value;
+                }
+
+            }
+            return name;
         }
 
         private void button2_Click(object sender, EventArgs e)
