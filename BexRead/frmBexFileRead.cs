@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,7 +8,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -206,7 +209,22 @@ namespace BexFileRead
                 txtContent.Text = selectedOb.Content;
                 string ObjectName = GetObjectName(selectedOb.Content);
                 lblObject.Text = ObjectName;
-
+                var toDeSerializy = selectedOb.Content;
+                var guids = FindAllGuids(toDeSerializy);
+                if (this.DataCatalogIndex != null)
+                {
+                    foreach (var g in guids)
+                    {
+                        var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == g).FirstOrDefault();
+                        if (obj != null)
+                        {
+                         var   name = obj.Value;
+                            toDeSerializy = toDeSerializy.Replace(g, name);
+                        }
+                    }
+                }
+                Deserialize(toDeSerializy);
+                jsonExplorer.ExpandAll();
             }
             catch (Exception)
             {
@@ -215,6 +233,61 @@ namespace BexFileRead
             }
 
         }
+
+        private void Deserialize(string json)
+        {
+            jsonExplorer.Nodes.Clear();
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            try
+            {
+                Dictionary<string, object> dic = js.Deserialize<Dictionary<string, object>>(json);
+
+                TreeNode rootNode = new TreeNode("Root");
+                jsonExplorer.Nodes.Add(rootNode);
+                BuildTree(dic, rootNode);
+            }
+            catch (ArgumentException argE)
+            {
+                MessageBox.Show("JSON data is not valid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        public void BuildTree(Dictionary<string, object> dictionary, TreeNode node)
+        {
+            foreach (KeyValuePair<string, object> item in dictionary)
+            {
+                TreeNode parentNode = new TreeNode(item.Key);
+                node.Nodes.Add(parentNode);
+
+                try
+                {
+                    dictionary = (Dictionary<string, object>)item.Value;
+                    BuildTree(dictionary, parentNode);
+                }
+                catch (InvalidCastException dicE)
+                {
+                    try
+                    {
+                        ArrayList list = (ArrayList)item.Value;
+                        foreach (string value in list)
+                        {
+                            TreeNode finalNode = new TreeNode(value);
+                            finalNode.ForeColor = Color.Blue;
+                            parentNode.Nodes.Add(finalNode);
+                        }
+
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                        TreeNode finalNode = new TreeNode(item.Value.ToString());
+                        finalNode.ForeColor = Color.Blue;
+                        parentNode.Nodes.Add(finalNode);
+                    }
+                }
+            }
+        }
+
 
         private string GetObjectName(string content)
         {
@@ -256,7 +329,36 @@ namespace BexFileRead
             lnk.Links[lnk.Links.IndexOf(e.Link)].Visited = true;
             System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
         }
+
+        private void jsonExplorer_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode.ToString() == "C")
+            {
+                if (jsonExplorer.SelectedNode != null)
+                {
+                    e.Handled = true;
+                    this.KeyPreview = true;
+
+                    //copy node label to clipboard
+                    Clipboard.SetText(jsonExplorer.SelectedNode.Text);
+                }
+            }
+        }
+
+        public List<String> FindAllGuids(string texto)
+        {
+            List<String> lista = new List<string>();
+            var reg = "[a-fA-F0-9]{8}-([a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}";
+            foreach (Match m in Regex.Matches(texto, reg))
+            {
+                lista.Add(m.Value);
+            }
+            return lista;
+        }
     }
+
+
+
 
     public class CNamePathPair
     {

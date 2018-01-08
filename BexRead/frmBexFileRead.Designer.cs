@@ -42,6 +42,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lblObject = new System.Windows.Forms.Label();
+            this.jsonExplorer = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
             // button1
@@ -186,11 +187,20 @@
             this.lblObject.TabIndex = 17;
             this.lblObject.Text = "Object";
             // 
+            // jsonExplorer
+            // 
+            this.jsonExplorer.Location = new System.Drawing.Point(844, 54);
+            this.jsonExplorer.Name = "jsonExplorer";
+            this.jsonExplorer.Size = new System.Drawing.Size(266, 663);
+            this.jsonExplorer.TabIndex = 18;
+            this.jsonExplorer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.jsonExplorer_KeyUp);
+            // 
             // frmBexFileRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(851, 796);
+            this.ClientSize = new System.Drawing.Size(1124, 796);
+            this.Controls.Add(this.jsonExplorer);
             this.Controls.Add(this.lblObject);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.linkLabel1);
@@ -229,6 +239,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label lblObject;
+        private System.Windows.Forms.TreeView jsonExplorer;
     }
 }
 
