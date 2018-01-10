@@ -43,6 +43,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lblObject = new System.Windows.Forms.Label();
             this.jsonExplorer = new System.Windows.Forms.TreeView();
+            this.cmbTabelas = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1
@@ -195,11 +196,21 @@
             this.jsonExplorer.TabIndex = 18;
             this.jsonExplorer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.jsonExplorer_KeyUp);
             // 
+            // cmbTabelas
+            // 
+            this.cmbTabelas.FormattingEnabled = true;
+            this.cmbTabelas.Location = new System.Drawing.Point(421, 6);
+            this.cmbTabelas.Name = "cmbTabelas";
+            this.cmbTabelas.Size = new System.Drawing.Size(421, 21);
+            this.cmbTabelas.TabIndex = 19;
+            this.cmbTabelas.SelectedIndexChanged += new System.EventHandler(this.cmbTabelas_SelectedIndexChanged);
+            // 
             // frmBexFileRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1124, 796);
+            this.Controls.Add(this.cmbTabelas);
             this.Controls.Add(this.jsonExplorer);
             this.Controls.Add(this.lblObject);
             this.Controls.Add(this.checkBox1);
@@ -240,6 +251,7 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label lblObject;
         private System.Windows.Forms.TreeView jsonExplorer;
+        private System.Windows.Forms.ComboBox cmbTabelas;
     }
 }
 

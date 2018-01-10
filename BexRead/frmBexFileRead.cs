@@ -20,6 +20,7 @@ namespace BexFileRead
     {
         public ArrayOfCatalogObject DataCatalog { get; private set; }
         public ArrayOfIndexValue DataCatalogIndex { get; private set; }
+        public List<CatalogObject> Tabelas { get; private set; }
 
         public frmBexFileRead()
         {
@@ -132,7 +133,13 @@ namespace BexFileRead
                 ArrayOfCatalogObject resultingMessage = (ArrayOfCatalogObject)serializer.Deserialize(rdr);
                 this.DataCatalog = resultingMessage;
                 propertyGrid1.SelectedObjects = resultingMessage.CatalogObject.ToArray();
-
+                this.Tabelas = new List<CatalogObject>();
+                this.Tabelas = FillTabelas(resultingMessage.CatalogObject);
+                cmbTabelas.Items.Clear();           
+                foreach (var tb in this.Tabelas)
+                {
+                    cmbTabelas.Items.Add(new ComboIten { Name =tb.Name, Value = tb.Id, Catalogo=tb });
+                }
                 Filter(resultingMessage.CatalogObject);
             }
             if (name== "Catalog__Indexes.xml")
@@ -145,6 +152,12 @@ namespace BexFileRead
                 this.DataCatalogIndex = cIndex;
 
             }
+        }
+
+        private List<CatalogObject> FillTabelas(List<CatalogObject> catalogObject)
+        {
+            List<CatalogObject> tabelas = catalogObject.Where(t => t.Type == "Entity").ToList();
+            return tabelas;
         }
 
         public  CNamePathPair[] UnzipFileToDirectory(string sZipFileName, string sUnzipDirectory)
@@ -288,6 +301,24 @@ namespace BexFileRead
             }
         }
 
+        public IndexValue GetTabela(string content)
+        {
+            IndexValue tb = new IndexValue();
+            if (content.Contains("finalEntity"))
+            {
+                var parentIdAr = content.Split(':');
+                var xname = parentIdAr[2].Replace("\"", "").Replace("\",\"disable\"", "").Replace(",disable", "");
+                if (this.DataCatalogIndex != null)
+                {
+                    var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == xname).FirstOrDefault();
+                    if (obj != null)
+                    {
+                        tb = obj;                      
+                    }
+                }
+            }
+            return tb;
+        }
 
         private string GetObjectName(string content)
         {
@@ -354,6 +385,14 @@ namespace BexFileRead
                 lista.Add(m.Value);
             }
             return lista;
+        }
+
+        private void cmbTabelas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var sel = cmbTabelas.SelectedItem;
+            var obj = (ComboIten)sel;
+            txtGuid.Text = obj.Value;
+            FilterByParent(obj.Value);
         }
     }
 
