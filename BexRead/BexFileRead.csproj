@@ -71,6 +71,7 @@
     <Compile Include="Relational.cs" />
     <Compile Include="StringDictionaryByName.cs" />
     <Compile Include="Tabela.cs" />
+    <Compile Include="TipoObjeto.cs" />
     <EmbeddedResource Include="frmBexFileRead.resx">
       <DependentUpon>frmBexFileRead.cs</DependentUpon>
     </EmbeddedResource>

@@ -44,6 +44,8 @@
             this.lblObject = new System.Windows.Forms.Label();
             this.jsonExplorer = new System.Windows.Forms.TreeView();
             this.cmbTabelas = new System.Windows.Forms.ComboBox();
+            this.cmbType = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -199,17 +201,37 @@
             // cmbTabelas
             // 
             this.cmbTabelas.FormattingEnabled = true;
-            this.cmbTabelas.Location = new System.Drawing.Point(421, 6);
+            this.cmbTabelas.Location = new System.Drawing.Point(782, 6);
             this.cmbTabelas.Name = "cmbTabelas";
-            this.cmbTabelas.Size = new System.Drawing.Size(421, 21);
+            this.cmbTabelas.Size = new System.Drawing.Size(328, 21);
             this.cmbTabelas.TabIndex = 19;
             this.cmbTabelas.SelectedIndexChanged += new System.EventHandler(this.cmbTabelas_SelectedIndexChanged);
+            // 
+            // cmbType
+            // 
+            this.cmbType.FormattingEnabled = true;
+            this.cmbType.Location = new System.Drawing.Point(645, 6);
+            this.cmbType.Name = "cmbType";
+            this.cmbType.Size = new System.Drawing.Size(131, 21);
+            this.cmbType.TabIndex = 20;
+            this.cmbType.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(608, 6);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 21;
+            this.label2.Text = "Tipo:";
             // 
             // frmBexFileRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1124, 796);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cmbType);
             this.Controls.Add(this.cmbTabelas);
             this.Controls.Add(this.jsonExplorer);
             this.Controls.Add(this.lblObject);
@@ -252,6 +274,8 @@
         private System.Windows.Forms.Label lblObject;
         private System.Windows.Forms.TreeView jsonExplorer;
         private System.Windows.Forms.ComboBox cmbTabelas;
+        private System.Windows.Forms.ComboBox cmbType;
+        private System.Windows.Forms.Label label2;
     }
 }
 

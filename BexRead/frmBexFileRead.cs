@@ -21,6 +21,7 @@ namespace BexFileRead
         public ArrayOfCatalogObject DataCatalog { get; private set; }
         public ArrayOfIndexValue DataCatalogIndex { get; private set; }
         public List<CatalogObject> Tabelas { get; private set; }
+        internal List<TipoObjeto> Types { get; private set; }
 
         public frmBexFileRead()
         {
@@ -108,8 +109,8 @@ namespace BexFileRead
             listView1.Columns.Add(che);
             foreach (var cont in lista)
             {
-                if (!checkBox1.Checked)
-                    if (cont.Type != "EntityValue") continue;
+                //if (!checkBox1.Checked)
+                //    if (cont.Type != "EntityValue") continue;
                 ListViewItem item1 = new ListViewItem();
                 item1.Text = (cont.Id);
                 item1.SubItems.Add(cont.Type);
@@ -134,12 +135,15 @@ namespace BexFileRead
                 this.DataCatalog = resultingMessage;
                 propertyGrid1.SelectedObjects = resultingMessage.CatalogObject.ToArray();
                 this.Tabelas = new List<CatalogObject>();
-                this.Tabelas = FillTabelas(resultingMessage.CatalogObject);
-                cmbTabelas.Items.Clear();           
-                foreach (var tb in this.Tabelas)
+                this.Types = new List<TipoObjeto>();
+                this.Types = FillTypes(resultingMessage.CatalogObject);
+                cmbType.Items.Clear();
+                foreach (var tb in this.Types)
                 {
-                    cmbTabelas.Items.Add(new ComboIten { Name =tb.Name, Value = tb.Id, Catalogo=tb });
+                    cmbType.Items.Add(new ComboIten { Name = tb.Tipo, Value = tb.Tipo,   Catalogos= tb.Objetos });
                 }
+                this.Tabelas = FillTabelas(resultingMessage.CatalogObject);
+               
                 Filter(resultingMessage.CatalogObject);
             }
             if (name== "Catalog__Indexes.xml")
@@ -152,6 +156,14 @@ namespace BexFileRead
                 this.DataCatalogIndex = cIndex;
 
             }
+        }
+
+        private List<TipoObjeto> FillTypes(List<CatalogObject> catalogObject)
+        {
+            var results = from p in catalogObject
+                          group p.Type by p.Type into g
+                          select new TipoObjeto { Tipo = g.Key, Objetos = g.Count() };
+            return results.ToList();
         }
 
         private List<CatalogObject> FillTabelas(List<CatalogObject> catalogObject)
@@ -393,6 +405,19 @@ namespace BexFileRead
             var obj = (ComboIten)sel;
             txtGuid.Text = obj.Value;
             FilterByParent(obj.Value);
+        }
+
+        private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var sel = cmbType.SelectedItem;
+            var obj = (ComboIten)sel;
+            cmbTabelas.Items.Clear();
+            var filterObject = this.DataCatalog.CatalogObject.Where(c => c.Type == obj.Value).ToList();
+            foreach (var tb in filterObject)
+            {
+                cmbTabelas.Items.Add(new ComboIten { Name = tb.Name, Value = tb.Id, Catalogo = tb });
+            }
+            Filter(filterObject);
         }
     }
 
