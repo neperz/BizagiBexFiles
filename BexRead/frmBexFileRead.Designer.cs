@@ -210,16 +210,16 @@
             // cmbType
             // 
             this.cmbType.FormattingEnabled = true;
-            this.cmbType.Location = new System.Drawing.Point(645, 6);
+            this.cmbType.Location = new System.Drawing.Point(582, 6);
             this.cmbType.Name = "cmbType";
-            this.cmbType.Size = new System.Drawing.Size(131, 21);
+            this.cmbType.Size = new System.Drawing.Size(194, 21);
             this.cmbType.TabIndex = 20;
             this.cmbType.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(608, 6);
+            this.label2.Location = new System.Drawing.Point(545, 6);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 21;

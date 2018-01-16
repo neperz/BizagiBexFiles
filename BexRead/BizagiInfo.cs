@@ -72,6 +72,8 @@ namespace BexFileRead
         public Schema Schema { get; set; }
         [XmlElement(ElementName = "BIZAGIINFO")]
         public List<BIZAGIINFO> BIZAGIINFO { get; set; }
+        [XmlElement(ElementName = "BADPLYCONFIG")]
+        public List<BADPLYCONFIG> BADPLYCONFIG { get; set; }
     }
 
 }

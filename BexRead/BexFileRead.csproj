@@ -54,6 +54,7 @@
     <Compile Include="BzOptions.cs" />
     <Compile Include="CatalogIndexes.cs" />
     <Compile Include="CatalogIndexObjects.cs" />
+    <Compile Include="CatalogLocalizagon.cs" />
     <Compile Include="CatalogObjects.cs" />
     <Compile Include="CatalogReferences.cs" />
     <Compile Include="CDictionary.cs" />

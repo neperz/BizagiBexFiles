@@ -22,6 +22,11 @@ namespace BexFileRead
         public ArrayOfIndexValue DataCatalogIndex { get; private set; }
         public List<CatalogObject> Tabelas { get; private set; }
         internal List<TipoObjeto> Types { get; private set; }
+        public NewDataSet BizagiInfo { get; private set; }
+        public ArrayOfReference CatalogReferences { get; private set; }
+        public AdvancedOptions AdvancedOptions { get; private set; }
+        public NewDataSet BADPLYConfig { get; private set; }
+        public PackageContentInformation PackageContentInformation { get; private set; }
 
         public frmBexFileRead()
         {
@@ -94,6 +99,53 @@ namespace BexFileRead
             }
             Filter(lista);
         }
+
+        private void FilterReferences(List<Reference> lista)
+        {
+            /*
+
+    <Pointer>51e6530f-6860-4cb1-9a1d-97f34c0d5a2f</Pointer>
+    <Referrer>d17202b8-b0ab-44c5-8404-004c35b9ae1c</Referrer>
+    <Target>0634f672-a510-49ca-bff4-f608f3c40d2a</Target>
+    <Root>4ac1e130-ed13-411f-90d0-1577fc5d3eb0</Root>
+    <Deleted>false</Deleted>             
+             */
+            listView1.Columns.Clear();
+            listView1.Items.Clear();
+            ColumnHeader chID = new ColumnHeader();
+            chID.Text = "Pointer";
+            listView1.Columns.Add(chID);
+            ColumnHeader ch = new ColumnHeader();
+            ch.Text = "Referrer";
+            listView1.Columns.Add(ch);
+            ColumnHeader che = new ColumnHeader();
+            che.Text = "Target";
+            listView1.Columns.Add(che);
+
+            ColumnHeader cheRoot = new ColumnHeader();
+            cheRoot.Text = "Root";
+            listView1.Columns.Add(cheRoot);
+
+            ColumnHeader cheDeleted = new ColumnHeader();
+            cheDeleted.Text = "Deleted";
+            listView1.Columns.Add(cheDeleted);
+            foreach (var cont in lista)
+            {
+                //if (!checkBox1.Checked)
+                //    if (cont.Type != "EntityValue") continue;
+                ListViewItem item1 = new ListViewItem();
+                item1.Text = GetObjectByGuid(cont.Pointer).IndexName;
+                item1.SubItems.Add(GetObjectByGuid(cont.Referrer).IndexName);
+                item1.SubItems.Add(GetObjectByGuid(cont.Target).IndexName);
+                item1.SubItems.Add(GetObjectByGuid(cont.Root).IndexName);
+                item1.SubItems.Add(cont.Deleted);
+                            
+                item1.Tag = cont;
+                listView1.Items.Add(item1);
+            }
+            listView1.Refresh();
+        }
+
         private void Filter(List<CatalogObject> lista)
         {
             listView1.Columns.Clear();
@@ -124,9 +176,85 @@ namespace BexFileRead
 
         public void  loadXml (string name, string path)
         {
-            if (name== "Catalog__Objects.xml")
+            ///BizagiInfo.xml
+            ///Catalog__Indexes.xml
+            ///Catalog__IndexObjects.xml
+            ///Catalog__Localization.xml
+            ///Catalog__Objects.xml
+            ///Catalog__References.xml
+            ///Options.xml
+            ///PackageInfo.xml
+            ///Relational.xml
+            ///
+            if (name == "PackageInfo.xml")
             {
+                var xmlCO = File.ReadAllText(path);
+                XmlSerializer serializer = new XmlSerializer(typeof(PackageContentInformation));
+                StringReader rdr = new StringReader(xmlCO);
+                PackageContentInformation packageContentInformation = (PackageContentInformation)serializer.Deserialize(rdr);
+                this.PackageContentInformation = packageContentInformation;
+              
+                    propertyGrid1.SelectedObject = packageContentInformation;
+                txtContent.Text = xmlCO;
+            }
+            if (name == "Relational.xml")
+            {
+                var xmlCO = File.ReadAllText(path);
+                XmlSerializer serializer = new XmlSerializer(typeof(NewDataSet));
+                StringReader rdr = new StringReader(xmlCO);
+                NewDataSet bADPLYCONFIG = (NewDataSet)serializer.Deserialize(rdr);
+                this.BADPLYConfig = bADPLYCONFIG;
+                //var dic = new Dictionary<string, string>();
+                //foreach (var b in bADPLYCONFIG.BADPLYCONFIG)
+                //{
+                //    dic.Add(b., b.BAValue);
+                //}
+               // propertyGrid1.SelectedObject = new DictionaryPropertyGridAdapter(dic);
+                txtContent.Text = xmlCO;
+            }
+
+            if (name == "Options.xml")
+            {
+                var xmlCO = File.ReadAllText(path);
+                XmlSerializer serializer = new XmlSerializer(typeof(AdvancedOptions));
+                StringReader rdr = new StringReader(xmlCO);
+                AdvancedOptions advancedOptions = (AdvancedOptions)serializer.Deserialize(rdr);
+                this.AdvancedOptions = advancedOptions;
+                var dic = new Dictionary<string, string>();
+                var option = advancedOptions.AdvancedOption.FirstOrDefault();
+                if (option != null)
+                    propertyGrid1.SelectedObject = option;
+                txtContent.Text = xmlCO;
+            }
+            if (name == "BizagiInfo.xml")
+            {
+                var xmlCO = File.ReadAllText(path);                
+                XmlSerializer serializer = new XmlSerializer(typeof(NewDataSet));
+                StringReader rdr = new StringReader(xmlCO);
+                NewDataSet bizagiInfo = (NewDataSet)serializer.Deserialize(rdr);
+                this.BizagiInfo = bizagiInfo;
+                var dic = new Dictionary<string, string>();
+                foreach (var b in bizagiInfo.BIZAGIINFO)
+                {
+                    dic.Add(b.BAInfo, b.BAValue);
+                }
+                propertyGrid1.SelectedObject = new DictionaryPropertyGridAdapter(dic);
+                txtContent.Text = xmlCO;
+            }
+            if (name == "Catalog__References.xml")
+            {
+                var xmlCO = File.ReadAllText(path);
+                XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfReference));
+                StringReader rdr = new StringReader(xmlCO);
+                ArrayOfReference catalogReferences = (ArrayOfReference)serializer.Deserialize(rdr);
+                this.CatalogReferences = catalogReferences;
+
+                FilterReferences(catalogReferences.Reference);
                 
+                txtContent.Text = xmlCO;
+            }
+            if (name== "Catalog__Objects.xml")
+            {                
                 var xmlCO = File.ReadAllText(path);
                 CatalogObject  catOb = new CatalogObject();
                 XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfCatalogObject));
@@ -136,7 +264,7 @@ namespace BexFileRead
                 propertyGrid1.SelectedObjects = resultingMessage.CatalogObject.ToArray();
                 this.Tabelas = new List<CatalogObject>();
                 this.Types = new List<TipoObjeto>();
-                this.Types = FillTypes(resultingMessage.CatalogObject);
+                this.Types = FillTypes(resultingMessage.CatalogObject).OrderBy(d=>d.Tipo).ToList();
                 cmbType.Items.Clear();
                 foreach (var tb in this.Types)
                 {
@@ -156,6 +284,7 @@ namespace BexFileRead
                 this.DataCatalogIndex = cIndex;
 
             }
+
         }
 
         private List<TipoObjeto> FillTypes(List<CatalogObject> catalogObject)
@@ -313,6 +442,22 @@ namespace BexFileRead
             }
         }
 
+        public IndexValue GetObjectByGuid(string id)
+        {
+            IndexValue tb = new IndexValue();
+            if (this.DataCatalogIndex != null)
+            {
+                var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == id).FirstOrDefault();
+                if (obj != null)
+                {
+                    tb = obj;
+                }
+                else
+                    tb.IndexName = id;
+            }
+            return tb;
+        }
+
         public IndexValue GetTabela(string content)
         {
             IndexValue tb = new IndexValue();
@@ -453,6 +598,137 @@ namespace BexFileRead
         }
     }
 
+    class DictionaryPropertyGridAdapter : ICustomTypeDescriptor
+    {
+        IDictionary _dictionary;
 
-  }
+        public DictionaryPropertyGridAdapter(IDictionary d)
+        {
+            _dictionary = d;
+        }
+
+        public string GetComponentName()
+        {
+            return TypeDescriptor.GetComponentName(this, true);
+        }
+
+        public EventDescriptor GetDefaultEvent()
+        {
+            return TypeDescriptor.GetDefaultEvent(this, true);
+        }
+
+        public string GetClassName()
+        {
+            return TypeDescriptor.GetClassName(this, true);
+        }
+
+        public EventDescriptorCollection GetEvents(Attribute[] attributes)
+        {
+            return TypeDescriptor.GetEvents(this, attributes, true);
+        }
+
+        EventDescriptorCollection System.ComponentModel.ICustomTypeDescriptor.GetEvents()
+        {
+            return TypeDescriptor.GetEvents(this, true);
+        }
+
+        public TypeConverter GetConverter()
+        {
+            return TypeDescriptor.GetConverter(this, true);
+        }
+
+        public object GetPropertyOwner(PropertyDescriptor pd)
+        {
+            return _dictionary;
+        }
+
+        public AttributeCollection GetAttributes()
+        {
+            return TypeDescriptor.GetAttributes(this, true);
+        }
+
+        public object GetEditor(Type editorBaseType)
+        {
+            return TypeDescriptor.GetEditor(this, editorBaseType, true);
+        }
+
+        public PropertyDescriptor GetDefaultProperty()
+        {
+            return null;
+        }
+
+        PropertyDescriptorCollection
+            System.ComponentModel.ICustomTypeDescriptor.GetProperties()
+        {
+            return ((ICustomTypeDescriptor)this).GetProperties(new Attribute[0]);
+        }
+
+        public PropertyDescriptorCollection GetProperties(Attribute[] attributes)
+        {
+            ArrayList properties = new ArrayList();
+            foreach (DictionaryEntry e in _dictionary)
+            {
+                properties.Add(new DictionaryPropertyDescriptor(_dictionary, e.Key));
+            }
+
+            PropertyDescriptor[] props =
+                (PropertyDescriptor[])properties.ToArray(typeof(PropertyDescriptor));
+
+            return new PropertyDescriptorCollection(props);
+        }
+    }
+
+    class DictionaryPropertyDescriptor : PropertyDescriptor
+    {
+        IDictionary _dictionary;
+        object _key;
+
+        internal DictionaryPropertyDescriptor(IDictionary d, object key)
+            : base(key.ToString(), null)
+        {
+            _dictionary = d;
+            _key = key;
+        }
+
+        public override Type PropertyType
+        {
+            get { return _dictionary[_key].GetType(); }
+        }
+
+        public override void SetValue(object component, object value)
+        {
+            _dictionary[_key] = value;
+        }
+
+        public override object GetValue(object component)
+        {
+            return _dictionary[_key];
+        }
+
+        public override bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public override Type ComponentType
+        {
+            get { return null; }
+        }
+
+        public override bool CanResetValue(object component)
+        {
+            return false;
+        }
+
+        public override void ResetValue(object component)
+        {
+        }
+
+        public override bool ShouldSerializeValue(object component)
+        {
+            return false;
+        }
+    }
+
+}
 
