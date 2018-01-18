@@ -81,6 +81,8 @@ namespace BexFileRead
         public ParentId ParentId { get; set; }
         [XmlElement(ElementName = "LocalizableProperties")]
         public LocalizableProperties LocalizableProperties { get; set; }
+        [XmlIgnore]
+        public Dictionary<string, object> Dicionario { get;  set; }
     }
 
     [XmlRoot(ElementName = "Reference")]

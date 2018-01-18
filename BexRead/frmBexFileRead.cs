@@ -68,8 +68,8 @@ namespace BexFileRead
         private void LoadXmls(CNamePathPair[] array)
         {
             var lista = array.ToList();
-            var Catalog__Objects = lista.Where(d => d.Name == "Catalog__Objects.xml").FirstOrDefault();
-            var Catalog__Indexes = lista.Where(d => d.Name == "Catalog__Indexes.xml").FirstOrDefault();
+            var Catalog__Objects = lista.Where(d => d.Name.ToLower() == "catalog__objects.xml").FirstOrDefault();
+            var Catalog__Indexes = lista.Where(d => d.Name.ToLower() == "catalog__indexes.xml").FirstOrDefault();
             loadXml(Catalog__Indexes.Name, Catalog__Indexes.Path);
             loadXml(Catalog__Objects.Name, Catalog__Objects.Path);
             //  throw new NotImplementedException();
@@ -77,14 +77,14 @@ namespace BexFileRead
 
         public void FilterByGuid(string guid)
         {
-            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Id == guid).ToList();
+            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Id.ToLower() == guid.ToLower()).ToList();
 
             Filter(lista);
         }
         public void FilterByParent(string guid)
         {
-            var toFind = string.Format("\"finalEntity\":\"{0}\"", guid);
-            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Content.Contains(toFind)).ToList();
+            var toFind = string.Format("\"finalEntity\":\"{0}\"", guid).ToLower();
+            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Content.ToLower().Contains(toFind)).ToList();
 
             Filter(lista);
         }
@@ -92,7 +92,7 @@ namespace BexFileRead
         {
             txtContent.Text = "";
             var toFind = "\"disable\":true";
-            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Content.Contains(toFind)).ToList();
+            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Content.ToLower().Contains(toFind.ToLower())).ToList();
             foreach (var d in lista)
             {
                 txtContent.Text += "'" + d.Id + "',";
@@ -159,15 +159,80 @@ namespace BexFileRead
             ColumnHeader che = new ColumnHeader();
             che.Text = "Content";
             listView1.Columns.Add(che);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            List<string> cabecalhos = new List<string>();
             foreach (var cont in lista)
+            {
+                try
+                {
+                    Dictionary<string, object> dic = js.Deserialize<Dictionary<string, object>>(cont.Content);
+                    cont.Dicionario = dic;
+                    if (dic.ContainsKey("fields"))
+                    {
+                        var tup = dic["fields"];
+                        Console.Write(tup);
+                        foreach (var idc in (Dictionary<string, object>)tup)
+                        {
+                            var nome = GetObjectByGuid(idc.Key.ToLower());  if (!cabecalhos.Any(s => s == nome.Value))  cabecalhos.Add(nome.Value);                          
+                        }
+                    }
+                }
+                catch (Exception)  { }
+            }
+            foreach (var h in cabecalhos)
+            {
+                ColumnHeader hin = new ColumnHeader();
+                hin.Text = h;
+                listView1.Columns.Add(hin);
+            }
+                foreach (var cont in lista)
             {
                 //if (!checkBox1.Checked)
                 //    if (cont.Type != "EntityValue") continue;
                 ListViewItem item1 = new ListViewItem();
                 item1.Text = (cont.Id);
                 item1.SubItems.Add(cont.Type);
-                var ultPart = cont.Content.Split(':').Last().Replace("}}", "");
-                item1.SubItems.Add(ultPart);
+                 
+                   // var ultPart = cont.Content.Split(':').Last().Replace("}}", "");
+                  //  item1.SubItems.Add(ultPart);
+                
+                  
+
+                try
+                {
+                    Dictionary<string, object> dic = cont.Dicionario;// js.Deserialize<Dictionary<string, object>>(cont.Content);
+                    if (dic.ContainsKey("fields"))
+                    {
+                        var tup = dic["fields"];
+                        Console.Write(tup);
+                        foreach (var idc in (Dictionary<string, object>)tup)
+                        {
+                            foreach (ColumnHeader item in listView1.Columns)
+                            {
+                                if (item.Index <= 1) continue;
+                                var nome = GetObjectByGuid(idc.Key.ToLower());
+                                if (item.Text == nome.Value)
+                                {
+                                    item1.SubItems.Add(idc.Value.ToString());
+                                  //  break;
+                                }
+                                //else
+                                    //item1.SubItems.Add("");
+                                //if (!cabecalhos.Any(s => s == nome.Value))
+                                //    cabecalhos.Add(nome.Value);
+                                //linha += (nome.Value + ":" + idc.Value + "; ");
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception)
+                {
+
+                   // throw;
+                }
+
+             
                 item1.Tag = cont;
                 listView1.Items.Add(item1);
             }
@@ -186,7 +251,7 @@ namespace BexFileRead
             ///PackageInfo.xml
             ///Relational.xml
             ///
-            if (name == "PackageInfo.xml")
+            if (name.ToLower() == "packageinfo.xml")
             {
                 var xmlCO = File.ReadAllText(path);
                 XmlSerializer serializer = new XmlSerializer(typeof(PackageContentInformation));
@@ -197,7 +262,7 @@ namespace BexFileRead
                     propertyGrid1.SelectedObject = packageContentInformation;
                 txtContent.Text = xmlCO;
             }
-            if (name == "Relational.xml")
+            if (name.ToLower() == "relational.xml")
             {
                 var xmlCO = File.ReadAllText(path);
                 XmlSerializer serializer = new XmlSerializer(typeof(NewDataSet));
@@ -213,7 +278,7 @@ namespace BexFileRead
                 txtContent.Text = xmlCO;
             }
 
-            if (name == "Options.xml")
+            if (name.ToLower() == "options.xml")
             {
                 var xmlCO = File.ReadAllText(path);
                 XmlSerializer serializer = new XmlSerializer(typeof(AdvancedOptions));
@@ -226,7 +291,7 @@ namespace BexFileRead
                     propertyGrid1.SelectedObject = option;
                 txtContent.Text = xmlCO;
             }
-            if (name == "BizagiInfo.xml")
+            if (name.ToLower() == "bizagiinfo.xml")
             {
                 var xmlCO = File.ReadAllText(path);                
                 XmlSerializer serializer = new XmlSerializer(typeof(NewDataSet));
@@ -241,7 +306,7 @@ namespace BexFileRead
                 propertyGrid1.SelectedObject = new DictionaryPropertyGridAdapter(dic);
                 txtContent.Text = xmlCO;
             }
-            if (name == "Catalog__References.xml")
+            if (name.ToLower() == "catalog__references.xml")
             {
                 var xmlCO = File.ReadAllText(path);
                 XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfReference));
@@ -253,7 +318,7 @@ namespace BexFileRead
                 
                 txtContent.Text = xmlCO;
             }
-            if (name== "Catalog__Objects.xml")
+            if (name.ToLower() == "catalog__objects.xml")
             {                
                 var xmlCO = File.ReadAllText(path);
                 CatalogObject  catOb = new CatalogObject();
@@ -274,7 +339,7 @@ namespace BexFileRead
                
                 Filter(resultingMessage.CatalogObject);
             }
-            if (name== "Catalog__Indexes.xml")
+            if (name.ToLower() == "catalog__indexes.xml")
             {
                 var xmlCO = File.ReadAllText(path);
                 ArrayOfIndexValue cIndex = new ArrayOfIndexValue();
@@ -365,11 +430,16 @@ namespace BexFileRead
                 lblObject.Text = ObjectName;
                 var toDeSerializy = selectedOb.Content;
                 var guids = FindAllGuids(toDeSerializy);
+                foreach (var g in guids)
+                {
+                    toDeSerializy = toDeSerializy.Replace(g, g.ToLower());
+                }
+                guids = FindAllGuids(toDeSerializy);
                 if (this.DataCatalogIndex != null)
                 {
                     foreach (var g in guids)
                     {
-                        var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == g).FirstOrDefault();
+                        var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId.ToLower() == g.ToLower()).FirstOrDefault();
                         if (obj != null)
                         {
                          var   name = obj.Value;
@@ -486,7 +556,7 @@ namespace BexFileRead
                 var xname = parentIdAr[2].Replace("\"","").Replace("\",\"disable\"","").Replace(",disable","");
                 if (this.DataCatalogIndex!=null)
                 {
-                    var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == xname).FirstOrDefault();
+                    var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId.ToLower() == xname.ToLower()).FirstOrDefault();
                     if (obj != null)
                         name = obj.Value;
                 }
@@ -560,7 +630,7 @@ namespace BexFileRead
             var filterObject = this.DataCatalog.CatalogObject.Where(c => c.Type == obj.Value).ToList();
             foreach (var tb in filterObject)
             {
-                cmbTabelas.Items.Add(new ComboIten { Name = tb.Name, Value = tb.Id, Catalogo = tb });
+                cmbTabelas.Items.Add(new ComboIten { Name = tb.Name, Value = tb.Id.ToLower(), Catalogo = tb });
             }
             Filter(filterObject);
         }
