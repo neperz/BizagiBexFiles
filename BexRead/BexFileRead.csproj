@@ -60,6 +60,7 @@
     <Compile Include="CDictionary.cs" />
     <Compile Include="ComboIten.cs" />
     <Compile Include="Compression.cs" />
+    <Compile Include="DocumentTemplate.cs" />
     <Compile Include="frmBexFileRead.cs">
       <SubType>Form</SubType>
     </Compile>

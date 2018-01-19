@@ -4,33 +4,7 @@ using System.Collections.Generic;
 namespace BexFileRead
 {
 
-    [XmlRoot(ElementName = "HasOverride")]
-    public class HasOverride
-    {
-        [XmlAttribute(AttributeName = "nil", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
-        public string Nil { get; set; }
-    }
-
-    [XmlRoot(ElementName = "IsSystem")]
-    public class IsSystem
-    {
-        [XmlAttribute(AttributeName = "nil", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
-        public string Nil { get; set; }
-    }
-
-    [XmlRoot(ElementName = "IsInProduction")]
-    public class IsInProduction
-    {
-        [XmlAttribute(AttributeName = "nil", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
-        public string Nil { get; set; }
-    }
-
-    [XmlRoot(ElementName = "IsReadyForRemoving")]
-    public class IsReadyForRemoving
-    {
-        [XmlAttribute(AttributeName = "nil", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
-        public string Nil { get; set; }
-    }
+   
 
     [XmlRoot(ElementName = "CatalogObject")]
     public class CatalogObject
@@ -60,13 +34,13 @@ namespace BexFileRead
         [XmlElement(ElementName = "ContentFormat")]
         public string ContentFormat { get; set; }
         [XmlElement(ElementName = "HasOverride")]
-        public HasOverride HasOverride { get; set; }
+        public string HasOverride { get; set; }
         [XmlElement(ElementName = "IsSystem")]
-        public IsSystem IsSystem { get; set; }
+        public string IsSystem { get; set; }
         [XmlElement(ElementName = "IsInProduction")]
-        public IsInProduction IsInProduction { get; set; }
+        public string IsInProduction { get; set; }
         [XmlElement(ElementName = "IsReadyForRemoving")]
-        public IsReadyForRemoving IsReadyForRemoving { get; set; }
+        public string IsReadyForRemoving { get; set; }
         [XmlElement(ElementName = "Children")]
         public string Children { get; set; }
         [XmlElement(ElementName = "CatalogReferences")]
@@ -78,7 +52,7 @@ namespace BexFileRead
         [XmlElement(ElementName = "Indexes")]
         public Indexes Indexes { get; set; }
         [XmlElement(ElementName = "ParentId")]
-        public ParentId ParentId { get; set; }
+        public string ParentId { get; set; }
         [XmlElement(ElementName = "LocalizableProperties")]
         public LocalizableProperties LocalizableProperties { get; set; }
         [XmlIgnore]

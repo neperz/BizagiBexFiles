@@ -41,7 +41,7 @@ namespace BexFileRead
             //theDialog.InitialDirectory = @"C:\";
             if (theDialog.ShowDialog() == DialogResult.OK)
             {
-                
+
                 if (File.Exists(theDialog.FileName))
                 {
                     var outdir = Path.GetTempPath() + "\\LeitorDeBex\\";
@@ -60,7 +60,7 @@ namespace BexFileRead
                 }
             }
 
-         //   var sBackup = ReadBackupFromFile(txtBexFile.Text);
+            //   var sBackup = ReadBackupFromFile(txtBexFile.Text);
             //propertyGrid1.SelectedObject = sBackup;
 
         }
@@ -85,6 +85,13 @@ namespace BexFileRead
         {
             var toFind = string.Format("\"finalEntity\":\"{0}\"", guid).ToLower();
             List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.Content.ToLower().Contains(toFind)).ToList();
+
+            Filter(lista);
+        }
+        public void FilterByAttributeByParent(string guid)
+        {
+            // var toFind = string.Format("\"finalEntity\":\"{0}\"", guid).ToLower();
+            List<CatalogObject> lista = this.DataCatalog.CatalogObject.Where(r => r.ParentId.ToLower() == guid.ToLower()).ToList();
 
             Filter(lista);
         }
@@ -139,7 +146,7 @@ namespace BexFileRead
                 item1.SubItems.Add(GetObjectByGuid(cont.Target).IndexName);
                 item1.SubItems.Add(GetObjectByGuid(cont.Root).IndexName);
                 item1.SubItems.Add(cont.Deleted);
-                            
+
                 item1.Tag = cont;
                 listView1.Items.Add(item1);
             }
@@ -152,32 +159,43 @@ namespace BexFileRead
             listView1.Items.Clear();
             ColumnHeader chID = new ColumnHeader();
             chID.Text = "ID";
+            //chID.Width
             listView1.Columns.Add(chID);
             ColumnHeader ch = new ColumnHeader();
             ch.Text = "Type";
             listView1.Columns.Add(ch);
-            ColumnHeader che = new ColumnHeader();
-            che.Text = "Content";
-            listView1.Columns.Add(che);
+
+            ColumnHeader CHname = new ColumnHeader();
+            CHname.Text = "Nome";
+            listView1.Columns.Add(CHname);
+
+
+            // ColumnHeader che = new ColumnHeader();
+            //  che.Text = "Content";
+            //            listView1.Columns.Add(che);
             JavaScriptSerializer js = new JavaScriptSerializer();
             List<string> cabecalhos = new List<string>();
             foreach (var cont in lista)
             {
                 try
                 {
-                    Dictionary<string, object> dic = js.Deserialize<Dictionary<string, object>>(cont.Content);
-                    cont.Dicionario = dic;
-                    if (dic.ContainsKey("fields"))
+                    if (cont.Type == "EntityValue")
                     {
-                        var tup = dic["fields"];
-                        Console.Write(tup);
-                        foreach (var idc in (Dictionary<string, object>)tup)
+                        Dictionary<string, object> dic = js.Deserialize<Dictionary<string, object>>(cont.Content);
+                        cont.Dicionario = dic;
+
+                        if (dic.ContainsKey("fields"))
                         {
-                            var nome = GetObjectByGuid(idc.Key.ToLower());  if (!cabecalhos.Any(s => s == nome.Value))  cabecalhos.Add(nome.Value);                          
+                            var tup = dic["fields"];
+                            Console.Write(tup);
+                            foreach (var idc in (Dictionary<string, object>)tup)
+                            {
+                                var nome = GetObjectByGuid(idc.Key.ToLower()); if (!cabecalhos.Any(s => s == nome.Value)) cabecalhos.Add(nome.Value);
+                            }
                         }
                     }
                 }
-                catch (Exception)  { }
+                catch (Exception) { }
             }
             foreach (var h in cabecalhos)
             {
@@ -185,61 +203,67 @@ namespace BexFileRead
                 hin.Text = h;
                 listView1.Columns.Add(hin);
             }
-                foreach (var cont in lista)
+            foreach (var cont in lista)
             {
                 //if (!checkBox1.Checked)
                 //    if (cont.Type != "EntityValue") continue;
                 ListViewItem item1 = new ListViewItem();
                 item1.Text = (cont.Id);
                 item1.SubItems.Add(cont.Type);
-                 
-                   // var ultPart = cont.Content.Split(':').Last().Replace("}}", "");
-                  //  item1.SubItems.Add(ultPart);
-                
-                  
+                item1.SubItems.Add(cont.Name);
+
+                // var ultPart = cont.Content.Split(':').Last().Replace("}}", "");
+                //  item1.SubItems.Add(ultPart);
+
+
 
                 try
                 {
-                    Dictionary<string, object> dic = cont.Dicionario;// js.Deserialize<Dictionary<string, object>>(cont.Content);
-                    if (dic.ContainsKey("fields"))
+                    if (cont.Dicionario != null)
                     {
-                        var tup = dic["fields"];
-                        Console.Write(tup);
-                        foreach (var idc in (Dictionary<string, object>)tup)
-                        {
-                            foreach (ColumnHeader item in listView1.Columns)
-                            {
-                                if (item.Index <= 1) continue;
-                                var nome = GetObjectByGuid(idc.Key.ToLower());
-                                if (item.Text == nome.Value)
-                                {
-                                    item1.SubItems.Add(idc.Value.ToString());
-                                  //  break;
-                                }
-                                //else
-                                    //item1.SubItems.Add("");
-                                //if (!cabecalhos.Any(s => s == nome.Value))
-                                //    cabecalhos.Add(nome.Value);
-                                //linha += (nome.Value + ":" + idc.Value + "; ");
-                            }
-                        }
+                        Dictionary<string, object> dic = cont.Dicionario;// js.Deserialize<Dictionary<string, object>>(cont.Content);
 
+                        if (dic.ContainsKey("fields"))
+                        {
+                            var tup = dic["fields"];
+                            Console.Write(tup);
+                            foreach (var idc in (Dictionary<string, object>)tup)
+                            {
+                                foreach (ColumnHeader item in listView1.Columns)
+                                {
+                                    if (item.Index <= 2) continue;
+                                    var nome = GetObjectByGuid(idc.Key.ToLower());
+                                    if (item.Text == nome.Value)
+                                    {
+                                        item1.SubItems.Add(idc.Value.ToString());
+                                        //  break;
+                                    }
+                                    //else
+                                    //item1.SubItems.Add("");
+                                    //if (!cabecalhos.Any(s => s == nome.Value))
+                                    //    cabecalhos.Add(nome.Value);
+                                    //linha += (nome.Value + ":" + idc.Value + "; ");
+                                }
+                            }
+
+                        }
                     }
                 }
                 catch (Exception)
                 {
 
-                   // throw;
+                    // throw;
                 }
 
-             
+
                 item1.Tag = cont;
                 listView1.Items.Add(item1);
             }
             listView1.Refresh();
+            lblCont.Text = lista.Count().ToString();
         }
 
-        public void  loadXml (string name, string path)
+        public void loadXml(string name, string path)
         {
             ///BizagiInfo.xml
             ///Catalog__Indexes.xml
@@ -258,8 +282,8 @@ namespace BexFileRead
                 StringReader rdr = new StringReader(xmlCO);
                 PackageContentInformation packageContentInformation = (PackageContentInformation)serializer.Deserialize(rdr);
                 this.PackageContentInformation = packageContentInformation;
-              
-                    propertyGrid1.SelectedObject = packageContentInformation;
+
+                propertyGrid1.SelectedObject = packageContentInformation;
                 txtContent.Text = xmlCO;
             }
             if (name.ToLower() == "relational.xml")
@@ -274,7 +298,7 @@ namespace BexFileRead
                 //{
                 //    dic.Add(b., b.BAValue);
                 //}
-               // propertyGrid1.SelectedObject = new DictionaryPropertyGridAdapter(dic);
+                // propertyGrid1.SelectedObject = new DictionaryPropertyGridAdapter(dic);
                 txtContent.Text = xmlCO;
             }
 
@@ -293,7 +317,7 @@ namespace BexFileRead
             }
             if (name.ToLower() == "bizagiinfo.xml")
             {
-                var xmlCO = File.ReadAllText(path);                
+                var xmlCO = File.ReadAllText(path);
                 XmlSerializer serializer = new XmlSerializer(typeof(NewDataSet));
                 StringReader rdr = new StringReader(xmlCO);
                 NewDataSet bizagiInfo = (NewDataSet)serializer.Deserialize(rdr);
@@ -315,13 +339,13 @@ namespace BexFileRead
                 this.CatalogReferences = catalogReferences;
 
                 FilterReferences(catalogReferences.Reference);
-                
+
                 txtContent.Text = xmlCO;
             }
             if (name.ToLower() == "catalog__objects.xml")
-            {                
+            {
                 var xmlCO = File.ReadAllText(path);
-                CatalogObject  catOb = new CatalogObject();
+                CatalogObject catOb = new CatalogObject();
                 XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfCatalogObject));
                 StringReader rdr = new StringReader(xmlCO);
                 ArrayOfCatalogObject resultingMessage = (ArrayOfCatalogObject)serializer.Deserialize(rdr);
@@ -329,15 +353,15 @@ namespace BexFileRead
                 propertyGrid1.SelectedObjects = resultingMessage.CatalogObject.ToArray();
                 this.Tabelas = new List<CatalogObject>();
                 this.Types = new List<TipoObjeto>();
-                this.Types = FillTypes(resultingMessage.CatalogObject).OrderBy(d=>d.Tipo).ToList();
+                this.Types = FillTypes(resultingMessage.CatalogObject).OrderBy(d => d.Tipo).ToList();
                 cmbType.Items.Clear();
                 foreach (var tb in this.Types)
                 {
-                    cmbType.Items.Add(new ComboIten { Name = tb.Tipo, Value = tb.Tipo,   Catalogos= tb.Objetos });
+                    cmbType.Items.Add(new ComboIten { Name = tb.Tipo, Value = tb.Tipo, Catalogos = tb.Objetos });
                 }
                 this.Tabelas = FillTabelas(resultingMessage.CatalogObject);
-               
-                Filter(resultingMessage.CatalogObject);
+
+                //Filter(resultingMessage.CatalogObject);
             }
             if (name.ToLower() == "catalog__indexes.xml")
             {
@@ -366,7 +390,7 @@ namespace BexFileRead
             return tabelas;
         }
 
-        public  CNamePathPair[] UnzipFileToDirectory(string sZipFileName, string sUnzipDirectory)
+        public CNamePathPair[] UnzipFileToDirectory(string sZipFileName, string sUnzipDirectory)
         {
             CNamePathPairList cNamePathPairList = new CNamePathPairList();
             using (ZipInputStream zipInputStream = new ZipInputStream(File.OpenRead(sZipFileName)))
@@ -405,7 +429,7 @@ namespace BexFileRead
             }
             CNamePathPair[] array = cNamePathPairList.ToArray();
             cNamePathPairList.Clear();
-           
+
             return array;
         }
 
@@ -442,7 +466,7 @@ namespace BexFileRead
                         var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId.ToLower() == g.ToLower()).FirstOrDefault();
                         if (obj != null)
                         {
-                         var   name = obj.Value;
+                            var name = obj.Value;
                             toDeSerializy = toDeSerializy.Replace(g, name);
                         }
                     }
@@ -453,7 +477,7 @@ namespace BexFileRead
             catch (Exception)
             {
 
-              //  throw;
+                //  throw;
             }
 
         }
@@ -473,7 +497,7 @@ namespace BexFileRead
             }
             catch (ArgumentException argE)
             {
-                MessageBox.Show("JSON data is not valid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+               // MessageBox.Show("JSON data is not valid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -504,7 +528,9 @@ namespace BexFileRead
                     }
                     catch (InvalidCastException ex)
                     {
+                        
                         TreeNode finalNode = new TreeNode(item.Value.ToString());
+                        finalNode.Tag = item;
                         finalNode.ForeColor = Color.Blue;
                         parentNode.Nodes.Add(finalNode);
                     }
@@ -540,7 +566,7 @@ namespace BexFileRead
                     var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId == xname).FirstOrDefault();
                     if (obj != null)
                     {
-                        tb = obj;                      
+                        tb = obj;
                     }
                 }
             }
@@ -553,8 +579,8 @@ namespace BexFileRead
             if (content.Contains("finalEntity"))
             {
                 var parentIdAr = content.Split(':');
-                var xname = parentIdAr[2].Replace("\"","").Replace("\",\"disable\"","").Replace(",disable","");
-                if (this.DataCatalogIndex!=null)
+                var xname = parentIdAr[2].Replace("\"", "").Replace("\",\"disable\"", "").Replace(",disable", "");
+                if (this.DataCatalogIndex != null)
                 {
                     var obj = this.DataCatalogIndex.IndexValueIn.Where(x => x.ObjectId.ToLower() == xname.ToLower()).FirstOrDefault();
                     if (obj != null)
@@ -585,7 +611,8 @@ namespace BexFileRead
             LinkLabel lnk = new LinkLabel();
             lnk = (LinkLabel)sender;
             lnk.Links[lnk.Links.IndexOf(e.Link)].Visited = true;
-            System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
+            //Process.Start("notepad.exe", fileName);
+            System.Diagnostics.Process.Start("notepad.exe",e.Link.LinkData.ToString());
         }
 
         private void jsonExplorer_KeyUp(object sender, KeyEventArgs e)
@@ -627,12 +654,121 @@ namespace BexFileRead
             var sel = cmbType.SelectedItem;
             var obj = (ComboIten)sel;
             cmbTabelas.Items.Clear();
-            var filterObject = this.DataCatalog.CatalogObject.Where(c => c.Type == obj.Value).ToList();
+            var filterObject = this.DataCatalog.CatalogObject.Where(c => c.Type == obj.Value).ToList().OrderBy(g => g.Name).ToList();
             foreach (var tb in filterObject)
             {
                 cmbTabelas.Items.Add(new ComboIten { Name = tb.Name, Value = tb.Id.ToLower(), Catalogo = tb });
             }
             Filter(filterObject);
+        }
+
+        private void frmBexFileRead_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void jsonExplorer_MouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+
+            Console.WriteLine("Clicked: " + e.Node.Text);
+        }
+
+        private void jsonExplorer_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void jsonExplorer_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+           
+        }
+
+        private string GetExtFromBase64(string base64)
+        {
+            var data = base64.Substring(0, 5);
+            switch (data.ToUpper())
+            {
+                case "IVBOR":
+                case "/9J/4":
+                    return ".png";
+                case "AAAAF":
+                    return ".mp4";
+                case "JVBER":
+                    return ".pdf";
+                case "UESDB":
+                    return ".zip";      
+                case "TVQQA":
+                    return ".dll";
+                default:
+                    return ".bin";
+            }
+        }
+
+        private void jsonExplorer_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (jsonExplorer.SelectedNode.Parent.Text == "file")
+            {
+                KeyValuePair<string, object> item = (KeyValuePair<string, object>)jsonExplorer.SelectedNode.Tag;
+                string ext = GetExtFromBase64((string)item.Value);
+                var outdir = Path.GetTempPath() + "\\LeitorDeBex\\";
+                var file = Path.GetTempFileName() + ext;
+                //var fFile = outdir + file;
+                File.WriteAllBytes(file, Convert.FromBase64String((string)item.Value));
+                if (ext == ".dll")
+                    MessageBox.Show("Dll salva em " + file);
+                else
+                {
+                    System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(file);
+                    psi.UseShellExecute = true;
+                    System.Diagnostics.Process.Start(psi);
+                }
+            }
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LinkLabel lnk = new LinkLabel();
+            lnk = (LinkLabel)sender;
+            lnk.Links[lnk.Links.IndexOf(e.Link)].Visited = true;
+            var entidadeGuid =(ComboIten) cmbTabelas.SelectedItem;
+            FilterByAttributeByParent(entidadeGuid.Value);
+            //Filter()
+        }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var sel = cmbTabelas.SelectedItem;
+            var obj = (ComboIten)sel;
+            txtGuid.Text = obj.Value;
+            FilterByParent(obj.Value);
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            DocumentTemplate d = new DocumentTemplate();
+            var selectedOb = (CatalogObject)listView1.SelectedItems[0].Tag;
+            if (selectedOb.Type== "DocumentTemplate")
+            {
+                string cont = selectedOb.Content;
+                XmlSerializer serializer = new XmlSerializer(typeof(DocumentTemplate));
+                StringReader rdr = new StringReader(cont);
+                d = (DocumentTemplate)serializer.Deserialize(rdr);
+                var ext = d.Format;
+                
+                var file = Path.GetTempFileName() + "." + ext;
+                File.WriteAllBytes(file, Convert.FromBase64String(d.Document));
+                if (ext == ".dll")
+                    MessageBox.Show("Dll salva em " + file);
+                else
+                {
+                    System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(file);
+                    psi.UseShellExecute = true;
+                    System.Diagnostics.Process.Start(psi);
+                }
+            }
+         //   propertyGrid1.SelectedObject = selectedOb;
+           // txtContent.Text = selectedOb.Content;
+
         }
     }
 
