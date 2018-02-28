@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BexFileRead
+namespace Bex.Domain
 {
 
     public class CDictionary<TKey, TValue> : Dictionary<TKey, TValue>

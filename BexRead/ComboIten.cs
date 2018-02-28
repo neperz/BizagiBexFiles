@@ -1,4 +1,6 @@
-﻿namespace BexFileRead
+﻿using Bex.Domain;
+
+namespace BexFileRead
 {
     public class ComboIten
     {

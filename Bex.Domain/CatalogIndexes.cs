@@ -2,15 +2,15 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace BexFileRead
+namespace Bex.Domain
 {
-  
-
-    [XmlRoot(ElementName = "ArrayOfIndexObject")]
-    public class ArrayOfIndexObject
+   
+ 
+    [XmlRoot(ElementName = "ArrayOfIndexValue")]
+    public class ArrayOfIndexValue
     {
-        [XmlElement(ElementName = "IndexObject")]
-        public List<IndexObject> IndexObject { get; set; }
+        [XmlElement(ElementName = "IndexValue")]
+        public List<IndexValue> IndexValueIn { get; set; }
         [XmlAttribute(AttributeName = "xsd", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Xsd { get; set; }
         [XmlAttribute(AttributeName = "xsi", Namespace = "http://www.w3.org/2000/xmlns/")]

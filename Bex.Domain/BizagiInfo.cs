@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace BexFileRead
+namespace Bex.Domain
 {
    
     [XmlRoot(ElementName = "element", Namespace = "http://www.w3.org/2001/XMLSchema")]

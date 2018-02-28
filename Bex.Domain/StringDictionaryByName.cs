@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 
-namespace BexFileRead
+namespace Bex.Domain
 {
 
     public class StringDictionaryByName : CDictionary<string, string>

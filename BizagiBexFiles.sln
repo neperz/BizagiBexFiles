@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BexFileRead", "BexRead\BexFileRead.csproj", "{C5A52026-FCE4-4269-9EF3-4EA0E8898430}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bex.Domain", "Bex.Domain\Bex.Domain.csproj", "{134FEB3A-6828-4D2F-8507-FA60EE3A4DC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{930F5CCC-B63B-4277-8451-504896D07F55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{C5A52026-FCE4-4269-9EF3-4EA0E8898430}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A52026-FCE4-4269-9EF3-4EA0E8898430}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5A52026-FCE4-4269-9EF3-4EA0E8898430}.Release|Any CPU.Build.0 = Release|Any CPU
+		{134FEB3A-6828-4D2F-8507-FA60EE3A4DC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{134FEB3A-6828-4D2F-8507-FA60EE3A4DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{134FEB3A-6828-4D2F-8507-FA60EE3A4DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134FEB3A-6828-4D2F-8507-FA60EE3A4DC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{930F5CCC-B63B-4277-8451-504896D07F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{930F5CCC-B63B-4277-8451-504896D07F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{930F5CCC-B63B-4277-8451-504896D07F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{930F5CCC-B63B-4277-8451-504896D07F55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

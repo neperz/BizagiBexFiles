@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace BexFileRead
+namespace Bex.Domain
 {
    
 

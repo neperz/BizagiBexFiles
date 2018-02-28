@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace BexFileRead
+namespace Bex.Domain
 {
     [XmlRoot(ElementName = "DocumentTemplate")]
     public class DocumentTemplate

@@ -50,30 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BizagiInfo.cs" />
-    <Compile Include="BzOptions.cs" />
-    <Compile Include="CatalogIndexes.cs" />
-    <Compile Include="CatalogIndexObjects.cs" />
-    <Compile Include="CatalogLocalizagon.cs" />
-    <Compile Include="CatalogObjects.cs" />
-    <Compile Include="CatalogReferences.cs" />
-    <Compile Include="CDictionary.cs" />
     <Compile Include="ComboIten.cs" />
-    <Compile Include="Compression.cs" />
-    <Compile Include="DocumentTemplate.cs" />
     <Compile Include="frmBexFileRead.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmBexFileRead.Designer.cs">
       <DependentUpon>frmBexFileRead.cs</DependentUpon>
     </Compile>
-    <Compile Include="PackageInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Relational.cs" />
-    <Compile Include="StringDictionaryByName.cs" />
-    <Compile Include="Tabela.cs" />
-    <Compile Include="TipoObjeto.cs" />
     <EmbeddedResource Include="frmBexFileRead.resx">
       <DependentUpon>frmBexFileRead.cs</DependentUpon>
     </EmbeddedResource>
@@ -100,6 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bex.Domain\Bex.Domain.csproj">
+      <Project>{134feb3a-6828-4d2f-8507-fa60ee3a4dc2}</Project>
+      <Name>Bex.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

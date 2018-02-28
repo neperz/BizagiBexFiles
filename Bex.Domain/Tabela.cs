@@ -1,4 +1,4 @@
-﻿namespace BexFileRead
+﻿namespace Bex.Domain
 {
     internal class Tabela
     {

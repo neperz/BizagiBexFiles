@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace BexFileRead
+namespace Bex.Domain
 {
 
     public static class Compression
