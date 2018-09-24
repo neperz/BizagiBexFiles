@@ -108,6 +108,7 @@
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(624, 510);
             this.propertyGrid1.TabIndex = 1;
+            this.propertyGrid1.Click += new System.EventHandler(this.propertyGrid1_Click);
             // 
             // listView1
             // 

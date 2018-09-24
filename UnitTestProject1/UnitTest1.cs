@@ -7,6 +7,21 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTest1
     {
+
+
+        [TestMethod]
+        public void DEVE_RETORNAR_MINUTOS()
+        {
+            var time = "01:30";
+            var vTime = time.Split(':');
+
+            var hora = int.Parse(vTime[0]);
+            var hMinuto = hora * 60;
+            var minuto = int.Parse( vTime[1]);
+            var totalMinutos = hMinuto + minuto;
+
+
+        }
         [System.Runtime.InteropServices.DllImport("Imagehlp.dll ")]
         private static extern bool ImageRemoveCertificate(IntPtr handle, int index);
         [TestMethod]

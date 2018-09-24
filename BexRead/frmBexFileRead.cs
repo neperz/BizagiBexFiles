@@ -771,6 +771,11 @@ namespace BexFileRead
            // txtContent.Text = selectedOb.Content;
 
         }
+
+        private void propertyGrid1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
