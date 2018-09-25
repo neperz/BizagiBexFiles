@@ -6,6 +6,7 @@ namespace BexFileRead
     {
         public string Name { get; set; }
         public string Value { get; set; }
+        public bool isSQL { get; set; }
         public CatalogObject Catalogo { get; set; }
         public int Catalogos { get; internal set; }
 

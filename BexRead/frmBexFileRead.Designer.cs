@@ -53,6 +53,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.panel5 = new System.Windows.Forms.Panel();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
+            this.button5 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -60,6 +61,7 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.btnSalva = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -358,6 +360,8 @@
             // 
             // splitContainer5.Panel1
             // 
+            this.splitContainer5.Panel1.Controls.Add(this.btnSalva);
+            this.splitContainer5.Panel1.Controls.Add(this.button5);
             this.splitContainer5.Panel1.Controls.Add(this.button1);
             this.splitContainer5.Panel1.Controls.Add(this.lblCont);
             this.splitContainer5.Panel1.Controls.Add(this.comboBox1);
@@ -377,6 +381,17 @@
             this.splitContainer5.Size = new System.Drawing.Size(335, 571);
             this.splitContainer5.SplitterDistance = 249;
             this.splitContainer5.TabIndex = 0;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(104, 11);
+            this.button5.Margin = new System.Windows.Forms.Padding(1);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(102, 26);
+            this.button5.TabIndex = 23;
+            this.button5.Text = "Load From SQL";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // panel3
             // 
@@ -466,6 +481,17 @@
             this.linkLabel2.Text = "Atributos";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
+            // btnSalva
+            // 
+            this.btnSalva.Location = new System.Drawing.Point(257, 218);
+            this.btnSalva.Margin = new System.Windows.Forms.Padding(1);
+            this.btnSalva.Name = "btnSalva";
+            this.btnSalva.Size = new System.Drawing.Size(73, 24);
+            this.btnSalva.TabIndex = 24;
+            this.btnSalva.Text = "Salvar";
+            this.btnSalva.UseVisualStyleBackColor = true;
+            this.btnSalva.Click += new System.EventHandler(this.btnSalva_Click);
+            // 
             // frmBexFileRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -543,6 +569,8 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.LinkLabel linkLabel3;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnSalva;
     }
 }
 
