@@ -65,6 +65,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Cryptography.cs" />
+    <Compile Include="Util\frmProtect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\frmProtect.Designer.cs">
+      <DependentUpon>frmProtect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Util\Protect.cs" />
     <EmbeddedResource Include="frmBexFileRead.resx">
       <DependentUpon>frmBexFileRead.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -79,6 +87,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Util\frmProtect.resx">
+      <DependentUpon>frmProtect.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

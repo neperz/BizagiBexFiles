@@ -1115,6 +1115,12 @@ namespace BexFileRead
             var id = this.ActualId;
             SaveDataToSQL(id, c64);
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var f = new Util.frmProtect();
+            f.ShowDialog();
+        }
     }
 
 
